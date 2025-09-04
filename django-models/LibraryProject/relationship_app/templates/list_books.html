@@ -9,9 +9,9 @@
     <ul>
         {% for book in books %}
         <li>{{ book.title }} by {{ book.author.name }}</li>
-        {% empty %}
-        <li>No books available.</li>
         {% endfor %}
     </ul>
 </body>
 </html>
+
+
