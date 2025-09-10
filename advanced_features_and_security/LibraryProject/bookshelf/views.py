@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import permission_required
 from .models import Book
 from django.db.models import Q
+from .forms import ExampleForm
+
 
 # Create your views here.
 
@@ -36,4 +38,18 @@ def search_books(request):
         Q(title__icontains=query) | Q(author__icontains=query)
     )
     return render(request, "bookshelf/book_list.html", {"books": results, "query": query})
+
+
+def example_form_view(request):
+    if request.method == "POST":
+        form = ExampleForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data["name"]
+            email = form.cleaned_data["email"]
+            # handle data securely
+    else:
+        form = ExampleForm()
+
+    return render(request, "bookshelf/form_example.html", {"form": form})
+
 
