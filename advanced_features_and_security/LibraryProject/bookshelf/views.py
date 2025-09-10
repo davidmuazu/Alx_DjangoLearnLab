@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import permission_required
 from .models import Book
+from django.db.models import Q
 
 # Create your views here.
 
@@ -28,4 +29,11 @@ def delete_book(request, book_id):
     # Implementation for deleting a book
     return render(request, "bookshelf/delete_book.html")
 
+
+def search_books(request):
+    query = request.GET.get("q", "")
+    results = Book.objects.filter(
+        Q(title__icontains=query) | Q(author__icontains=query)
+    )
+    return render(request, "bookshelf/book_list.html", {"books": results, "query": query})
 
