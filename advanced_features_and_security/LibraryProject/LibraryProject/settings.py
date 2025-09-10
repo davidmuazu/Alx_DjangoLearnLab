@@ -24,6 +24,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-yrnl8*zg=oii2im@o8i)_b^s^1z2e@rmv*$mzuywgj%k3e&9v8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# Tell Django it’s safe to trust the X-Forwarded-Proto header set by the proxy
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+
 DEBUG = False
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
@@ -158,6 +162,7 @@ LOGIN_REDIRECT_URL = "/"       # where to go after login
 LOGOUT_REDIRECT_URL = "/login/"  # where to go after logout
 
 AUTH_USER_MODEL = "bookshelf.CustomUser"
+
 
 
 
