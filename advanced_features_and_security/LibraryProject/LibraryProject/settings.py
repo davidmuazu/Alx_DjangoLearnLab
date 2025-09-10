@@ -24,12 +24,34 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-yrnl8*zg=oii2im@o8i)_b^s^1z2e@rmv*$mzuywgj%k3e&9v8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+
+
+# Browser security settings
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = 'DENY'
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Secure cookies
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
+# Content Security Policy (CSP) - using headers
+CSP_DEFAULT_SRC = ("'self'",)   # Only allow loading resources from same origin
+CSP_STYLE_SRC = ("'self'", 'https://fonts.googleapis.com') 
+CSP_SCRIPT_SRC = ("'self'",)
 
 
 # Application definition
+
+INSTALLED_APPS += ['csp']
+
+MIDDLEWARE += [
+    'csp.middleware.CSPMiddleware',
+]
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -128,4 +150,5 @@ LOGIN_REDIRECT_URL = "/"       # where to go after login
 LOGOUT_REDIRECT_URL = "/login/"  # where to go after logout
 
 AUTH_USER_MODEL = "bookshelf.CustomUser"
+
 
