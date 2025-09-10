@@ -6,7 +6,7 @@ from .models import Book
 
 # View all books (requires can_view)
 @permission_required("bookshelf.can_view", raise_exception=True)
-def view_books(request):
+def book_list(request):
     books = Book.objects.all()
     return render(request, "bookshelf/view_books.html", {"books": books})
 
@@ -27,4 +27,5 @@ def edit_book(request, book_id):
 def delete_book(request, book_id):
     # Implementation for deleting a book
     return render(request, "bookshelf/delete_book.html")
+
 
