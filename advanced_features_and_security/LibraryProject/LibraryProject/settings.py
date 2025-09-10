@@ -28,6 +28,14 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
+# Redirect all HTTP requests to HTTPS
+SECURE_SSL_REDIRECT = True
+# HTTP Strict Transport Security (HSTS) - force browsers to use HTTPS
+SECURE_HSTS_SECONDS = 31536000  # 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+
 
 # Browser security settings
 SECURE_BROWSER_XSS_FILTER = True
@@ -150,5 +158,6 @@ LOGIN_REDIRECT_URL = "/"       # where to go after login
 LOGOUT_REDIRECT_URL = "/login/"  # where to go after logout
 
 AUTH_USER_MODEL = "bookshelf.CustomUser"
+
 
 
