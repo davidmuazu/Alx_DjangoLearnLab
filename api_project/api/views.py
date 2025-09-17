@@ -8,8 +8,11 @@ from .serializers import BookSerializer
 class BookList(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    permission_classes = []
 
 # New ViewSet for full CRUD
 class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    permission_classes = [IsAuthenticated]
+
