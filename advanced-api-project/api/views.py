@@ -5,14 +5,14 @@ from .models import Book
 from .serializers import BookSerializer
 # Create your views here.
 
-# List all books (Read-only, accessible to everyone)
+# List all books 
 class BookListView(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
 
-# Retrieve one book by ID (Read-only, accessible to everyone)
+# Retrieve one book by ID 
 class BookDetailView(generics.RetrieveAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
@@ -38,4 +38,5 @@ class BookDeleteView(generics.DestroyAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticated]
+
 
