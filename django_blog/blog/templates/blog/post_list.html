@@ -1,0 +1,23 @@
+{% extends "blog/base.html" %}
+{% block title %}All Posts{% endblock %}
+{% block content %}
+<h1>Blog Posts</h1>
+
+{% for post in posts %}
+  <article>
+    <h2><a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a></h2>
+    <p>By {{ post.author.username }} • {{ post.published_date|date:"F j, Y, g:i a" }}</p>
+    <p>{{ post.content|truncatechars:250 }}</p>
+    {% if user.is_authenticated and user == post.author %}
+      <p>
+        <a href="{% url 'post-update' post.pk %}">Edit</a> |
+        <a href="{% url 'post-delete' post.pk %}">Delete</a>
+      </p>
+    {% endif %}
+    <hr>
+  </article>
+{% empty %}
+  <p>No posts yet.</p>
+{% endfor %}
+
+{% endblock %}
