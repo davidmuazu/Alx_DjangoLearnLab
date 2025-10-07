@@ -13,6 +13,16 @@
     </p>
   {% endif %}
 </article>
+
+<p>
+  Tags:
+  {% for tag in post.tags.all %}
+    <a href="{% url 'posts-by-tag' tag.name %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+  {% empty %}
+    <em>No tags</em>
+  {% endfor %}
+</p>
+
 {% endblock %}
 
 {% extends "blog/base.html" %}
