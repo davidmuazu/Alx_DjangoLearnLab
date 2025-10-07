@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.conf import settings
 from django.utils import timezone
+from taggit.managers import TaggableManager
 # Create your models here.
 
 
@@ -52,3 +53,4 @@ class Tag(models.Model):
 
     def get_absolute_url(self):
         return reverse("posts-by-tag", kwargs={"tag_name": self.name})
+
