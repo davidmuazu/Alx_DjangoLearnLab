@@ -8,6 +8,11 @@
 </head>
 <body>
     <header>
+        <form action="{% url 'post-search' %}" method="get" style="display:inline;">
+            <input type="text" name="q" placeholder="Search posts or tags..." value="{{ request.GET.q|default:'' }}">
+            <button type="submit">Search</button>
+        </form>
+
         <nav>
             <ul>
                 <li><a href="{% url 'home' %}">Home</a></li>
