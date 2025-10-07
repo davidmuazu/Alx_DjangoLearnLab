@@ -1,0 +1,26 @@
+<ul>
+{% for post in posts %}
+  <li>
+    <a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a>
+    <br>
+    <small>By {{ post.author.username }} — {{ post.published_date|date:"F j, Y" }}</small>
+    <p>{{ post.content|truncatechars:200 }}</p>
+    <p>
+      Tags:
+      {% for tag in post.tags.all %}
+        <a href="{% url 'posts-by-tag' tag.name %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+      {% empty %}
+        <em>No tags</em>
+      {% endfor %}
+    </p>
+  </li>
+{% endfor %}
+</ul>
+
+{% if is_paginated %}
+  <div class="pagination">
+    {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Prev</a>{% endif %}
+    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Next</a>{% endif %}
+  </div>
+{% endif %}

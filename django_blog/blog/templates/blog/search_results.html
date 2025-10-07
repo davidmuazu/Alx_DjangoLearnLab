@@ -1,0 +1,10 @@
+{% extends "blog/base.html" %}
+{% block title %}Search results{% endblock %}
+{% block content %}
+<h1>Search results for "{{ query }}"</h1>
+{% if posts %}
+  {% include "blog/_post_list_block.html" with posts=posts %}
+{% else %}
+  <p>No posts found for "{{ query }}".</p>
+{% endif %}
+{% endblock %}
