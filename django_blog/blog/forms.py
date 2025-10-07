@@ -23,10 +23,11 @@ class ProfileForm(forms.ModelForm):
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ["title", "content"]
+        fields = ["title", "content", "tags"]
         widgets = {
             "title": forms.TextInput(attrs={"class": "form-control"}),
             "content": forms.Textarea(attrs={"class": "form-control", "rows": 8}),
+            'tags': TagWidget(),
         }
 
 class CommentForm(forms.ModelForm):
@@ -74,4 +75,5 @@ class PostForm(forms.ModelForm):
             # replace the tags for the post
             post.tags.set(tag_objs)
         return post
+
 
