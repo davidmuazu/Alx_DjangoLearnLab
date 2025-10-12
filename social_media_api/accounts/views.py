@@ -7,9 +7,12 @@ from .models import User as CustomUser
 from .serializers import RegisterSerializer, LoginSerializer, ProfileSerializer
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
-# Create your views here.
-
+# Create your views here
+# .
+# generics.GenericAPIView
 CustomUser.objects.all()
+
+
 User = get_user_model()
 
 class RegisterView(generics.CreateAPIView):
@@ -46,25 +49,28 @@ class ProfileView(generics.RetrieveUpdateAPIView):
         return self.request.user
 
 
-class FollowUserView(APIView):
+class FollowUserView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
+    queryset = CustomUser.objects.all()
 
     def post(self, request, user_id):
-        target = get_object_or_404(User, pk=user_id)
-        if target == request.user:
+        target_user = get_object_or_404(CustomUser, id=user_id)
+        if target_user == request.user:
             return Response({"detail": "You cannot follow yourself."}, status=status.HTTP_400_BAD_REQUEST)
-        request.user.following.add(target)
-        return Response({"detail": f"You are now following {target.username}."}, status=status.HTTP_200_OK)
+        request.user.following.add(target_user)
+        return Response({"detail": f"You are now following {target_user.username}."}, status=status.HTTP_200_OK)
 
-class UnfollowUserView(APIView):
+
+class UnfollowUserView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
+    queryset = CustomUser.objects.all()
 
     def post(self, request, user_id):
-        target = get_object_or_404(User, pk=user_id)
-        if target == request.user:
+        target_user = get_object_or_404(CustomUser, id=user_id)
+        if target_user == request.user:
             return Response({"detail": "You cannot unfollow yourself."}, status=status.HTTP_400_BAD_REQUEST)
-        request.user.following.remove(target)
-        return Response({"detail": f"You have unfollowed {target.username}."}, status=status.HTTP_200_OK)
+        request.user.following.remove(target_user)
+        return Response({"detail": f"You have unfollowed {target_user.username}."}, status=status.HTTP_200_OK)
 
 class ListFollowingView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -73,4 +79,3 @@ class ListFollowingView(APIView):
         following = request.user.following.all()
         data = [{"id": u.id, "username": u.username} for u in following]
         return Response(data, status=status.HTTP_200_OK)
-
