@@ -4,6 +4,7 @@ from rest_framework.pagination import PageNumberPagination
 from django.contrib.auth import get_user_model
 from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
+from rest_framework import generics, permissions
 
 # Custom permission
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
@@ -52,3 +53,23 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+
+
+class FeedPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
+class FeedView(generics.ListAPIView):
+    """
+    Returns posts from users the current user follows, ordered by newest first.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = PostSerializer
+    pagination_class = FeedPagination
+
+    def get_queryset(self):
+        user = self.request.user
+        # if user follows nobody, returns empty queryset
+        follows = user.following.all()
+        return Post.objects.filter(author__in=follows).order_by('-created_at')
