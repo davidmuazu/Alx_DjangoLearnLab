@@ -1,12 +1,13 @@
-from rest_framework.routers import DefaultRouter
-from django.urls import path, include
-from .views import PostViewSet, CommentViewSet, FeedView
-
-router = DefaultRouter()
-router.register(r'posts', PostViewSet, basename='post')
-router.register(r'comments', CommentViewSet, basename='comment')
+from django.urls import path
+from .views import RegisterView, LoginView, ProfileView
+from .views import FollowUserView, UnfollowUserView, ListFollowingView
 
 urlpatterns = [
-    path('', include(router.urls)),
-    path('feed/', FeedView.as_view(), name='user-feed'),
+    path('register/', RegisterView.as_view(), name='register'),
+    path('login/', LoginView.as_view(), name='login'),
+    path('profile/', ProfileView.as_view(), name='profile'),
+
+    path('follow/<int:user_id>/', FollowUserView.as_view(), name='follow-user'),
+    path('unfollow/<int:user_id>/', UnfollowUserView.as_view(), name='unfollow-user'),
+    path('following/', ListFollowingView.as_view(), name='list-following'),
 ]
