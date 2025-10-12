@@ -3,12 +3,13 @@ from rest_framework import generics, status, permissions
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
-from .models import User
+from .models import User as CustomUser
 from .serializers import RegisterSerializer, LoginSerializer, ProfileSerializer
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 # Create your views here.
 
+CustomUser.objects.all()
 User = get_user_model()
 
 class RegisterView(generics.CreateAPIView):
@@ -72,3 +73,4 @@ class ListFollowingView(APIView):
         following = request.user.following.all()
         data = [{"id": u.id, "username": u.username} for u in following]
         return Response(data, status=status.HTTP_200_OK)
+
