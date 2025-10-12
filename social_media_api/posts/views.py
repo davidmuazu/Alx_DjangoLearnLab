@@ -64,22 +64,20 @@ class FeedView(generics.GenericAPIView):
         return Response(serializer.data)
 
 
+
 class LikePostView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, pk):
-        post = get_object_or_404(Post, pk=pk)
+        post = generics.get_object_or_404(Post, pk=pk)
 
-        # prevent liking your own post
         if request.user == post.author:
             return Response({"detail": "You cannot like your own post."}, status=status.HTTP_400_BAD_REQUEST)
 
-        # prevent duplicate likes
-        existing = Like.objects.filter(post=post, user=request.user)
-        if existing.exists():
-            return Response({"detail": "You have already liked this post."}, status=status.HTTP_400_BAD_REQUEST)
+        like, created = Like.objects.get_or_create(user=request.user, post=post)
 
-        like = Like.objects.create(post=post, user=request.user)
+        if not created:
+            return Response({"detail": "You have already liked this post."}, status=status.HTTP_400_BAD_REQUEST)
 
         # Create notification for post author if author != liker
         if post.author != request.user:
@@ -94,13 +92,15 @@ class LikePostView(generics.GenericAPIView):
         return Response({"detail": "Post liked."}, status=status.HTTP_201_CREATED)
 
 
+
+
 class UnlikePostView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, pk):
-        post = get_object_or_404(Post, pk=pk)
-        like_qs = Like.objects.filter(post=post, user=request.user)
+        post = generics.get_object_or_404(Post, pk=pk)
 
+        like_qs = Like.objects.filter(user=request.user, post=post)
         if not like_qs.exists():
             return Response({"detail": "You have not liked this post."}, status=status.HTTP_400_BAD_REQUEST)
 
